@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const useForm = () =>{
+const useForm = (callback) =>{
     const [formData, setFormData] = useState({
         username: "",
         password: ""
@@ -29,6 +29,7 @@ const useForm = () =>{
             if (response.ok){
                 const data = await response.json();
                 console.log('Login Successful:', data);
+                callback("/home");
             }
             else if (response.status === 500) {
                 alert('please try again later')

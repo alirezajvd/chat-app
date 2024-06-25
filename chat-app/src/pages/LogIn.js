@@ -1,9 +1,15 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate} from "react-router-dom";
 import useForm from "../components/useForm";
 import './styles/login.css'
 
 const LogIn = () =>{
-    const { formData, handleChange, handleSubmit } = useForm();
+
+    const navigate = useNavigate();
+    const handleRedirect = (path) => {
+        navigate(path);
+    }
+
+    const { formData, handleChange, handleSubmit } = useForm(handleRedirect);
 
     return(
         <div className="form-container">
