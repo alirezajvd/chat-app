@@ -1,4 +1,6 @@
-import useForm from "./useForm";
+import { Link } from "react-router-dom";
+import useForm from "../components/useForm";
+import './styles/login.css'
 
 const SignUp = () =>{
     const { formData, handleChange } = useForm();
@@ -34,15 +36,16 @@ const SignUp = () =>{
     }
 
     return(
-        <div>
-            <form onSubmit={handleSignUp} >
-                <h1>Sign up here</h1>
+        <div className="form-container">
+            <form onSubmit={handleSignUp}  >
+                <h1>Sign Up </h1>
                 <label htmlFor="userId">User name</label>
                 <input
                     name="username"
                     type="text"
                     value={formData.username}
                     onChange={handleChange}
+                    placeholder="hel"
                     required
                 />
                 <label htmlFor="Password">Password</label>
@@ -55,8 +58,11 @@ const SignUp = () =>{
                 />
                 <button type="submit">SIGN UP</button>
             </form>
-            <p>user:{formData.username}</p>
-            <p>pass:{formData.password}</p>
+            <span className="no-account">already have an account </span>
+            <Link to="/login">
+                <span className="sign-link">Login</span>
+            </Link>
+
         </div>
     )
 }

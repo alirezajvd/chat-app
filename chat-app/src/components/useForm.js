@@ -29,7 +29,14 @@ const useForm = () =>{
             if (response.ok){
                 const data = await response.json();
                 console.log('Login Successful:', data);
-            }else{
+            }
+            else if (response.status === 500) {
+                alert('please try again later')
+            }
+            else if (response.status === 401) {
+                alert('invalid username or password')
+            }
+            else{
                 console.error('invalid', response.statusText);
             }
         }catch(error){
