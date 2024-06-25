@@ -1,10 +1,15 @@
+import { Route, Router, Routes } from 'react-router-dom';
 import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      hello
-    </div>
+    <Router>
+      <Routes>
+        <Route>
+          
+        </Route>
+      </Routes>
+    </Router>
   );
 }
 
