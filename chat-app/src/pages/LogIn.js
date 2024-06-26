@@ -6,6 +6,8 @@ const LogIn = () =>{
 
     const navigate = useNavigate();
     const handleRedirect = (path) => {
+        console.log(sessionStorage.getItem('authToken'));
+        console.log(sessionStorage.getItem('userData'));
         navigate(path);
     }
 
@@ -13,6 +15,7 @@ const LogIn = () =>{
 
     return(
         <div className="form-container">
+            
             <form onSubmit={handleSubmit} >
                 <h1>Login</h1>
                 <label htmlFor="userId">Username</label>

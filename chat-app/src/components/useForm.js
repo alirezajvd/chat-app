@@ -1,6 +1,9 @@
 import { useState } from "react";
+import { useAuth } from "../AuthContext";
+
 
 const useForm = (callback) =>{
+    const { login } = useAuth();
     const [formData, setFormData] = useState({
         username: "",
         password: ""
@@ -29,6 +32,7 @@ const useForm = (callback) =>{
             if (response.ok){
                 const data = await response.json();
                 console.log('Login Successful:', data);
+                login(data.accessToken, data.username)
                 callback("/home");
             }
             else if (response.status === 500) {

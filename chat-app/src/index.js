@@ -7,6 +7,8 @@ import './index.css';
 import LogIn from './pages/LogIn'
 import SignUp from './pages/Signup';
 import Home from './pages/Home';
+import { AuthProvider } from './AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
 
 
 const routes = [
@@ -24,7 +26,7 @@ const routes = [
   },
   {
     path: "/home",
-    element: <Home />
+    element: <ProtectedRoute component={Home} />
   }
 ]
 const router = createBrowserRouter(routes);
@@ -32,7 +34,9 @@ const router = createBrowserRouter(routes);
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RouterProvider router = {router}/>
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </React.StrictMode>
 );
 
