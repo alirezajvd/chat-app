@@ -1,13 +1,13 @@
 import Sidebar from "../components/Sidebar"
 import Chat from "../components/Chat"
-const Home = () =>{
+import "./styles/home.css"
 
+const Home = () => {
 
-    return(
-        <div>
-            hello {sessionStorage.getItem('userData')};
-            <Sidebar />
-            <Chat />
+    return (
+        <div className="home-container">
+            <Sidebar className="sidebar" />
+            <Chat className="chat-container" />
         </div>
     )
 }

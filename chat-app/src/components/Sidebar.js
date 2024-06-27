@@ -1,7 +1,9 @@
  
-const Sidebar = () =>{
-    return(
-        <div>
+import "./styles/sidebar.css"
+
+const Sidebar = ({ className }) => {
+    return (
+        <div className="sidebar">
             sidebar hmmmm
         </div>
     )
