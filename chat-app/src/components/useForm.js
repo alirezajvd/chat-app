@@ -32,7 +32,8 @@ const useForm = (callback) =>{
             if (response.ok){
                 const data = await response.json();
                 console.log('Login Successful:', data);
-                login(data.accessToken, data.username)
+
+                login(data.accessToken, data.username, data.userId)
                 callback("/home");
             }
             else if (response.status === 500) {

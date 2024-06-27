@@ -5,19 +5,23 @@ const AuthContext = createContext();
 export const AuthProvider = ({children}) =>{
     const [auth, setAuth] = useState({
         token: sessionStorage.getItem('authToken'),
-        user: JSON.parse(sessionStorage.getItem('userData'))
+        user: JSON.parse(sessionStorage.getItem('userData')),
+        userId: sessionStorage.getItem('userId')
+
     });
 
-    const login = (token, user) =>{
+    const login = (token, user, userId) =>{
         sessionStorage.setItem('authToken', token);
         sessionStorage.setItem('userData', JSON.stringify(user));
-        setAuth({token, user});
+        sessionStorage.setItem('userId', userId);
+        setAuth({ token, user, userId });
     }
 
     const logout = (token, user) =>{
         sessionStorage.removeItem('authToken');
         sessionStorage.removeItem('userData');
-        setAuth({token: null, user: null})
+        sessionStorage.removeItem('userId')
+        setAuth({token: null, user: null, userId: null})
     };
     return(
         <AuthContext.Provider value ={{auth, login, logout}}>

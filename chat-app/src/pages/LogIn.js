@@ -1,13 +1,16 @@
 import { Link, useNavigate} from "react-router-dom";
 import useForm from "../components/useForm";
+import { useAuth } from "../AuthContext";
 import './styles/login.css'
 
 const LogIn = () =>{
 
+    const {auth} = useAuth();
     const navigate = useNavigate();
     const handleRedirect = (path) => {
-        console.log(sessionStorage.getItem('authToken'));
-        console.log(sessionStorage.getItem('userData'));
+        console.log(auth.token);
+        console.log(auth.user);
+        console.log(auth.userId);
         navigate(path);
     }
 

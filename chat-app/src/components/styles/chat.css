@@ -1,31 +1,61 @@
-.chat-container {
-    background-color: rgb(255, 255, 255);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    flex-grow: 1;
-    overflow-y: auto;
+/* Chat container styling */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+@keyframes hello {
+    form{
+        background-color: black;
+    }to{
+        background-color: rgb(56, 252, 121);
+    }
 }
 
-.chat-container form {
-    display: inherit;
-    justify-content: center;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: inherit;
-    padding: 10px;
-}
-.chat-container form input {
-    display: inherit;
+.chat-container {
+    display: flex;
+    flex-direction: column;
     flex-grow: 1;
+    overflow-y: auto;
+    /* position: relative; */
+    max-height: 100%;
+    padding-bottom: 60px;
+    /* Reserve space for the form */
+    animation: hello ;
+    animation-duration:  4s;
+    animation-timing-function: linear;
+}
+
+/* Form styling */
+.chat-container form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    bottom: 0;
+    width: 85%;
+
+    padding: 10px;
+    background-color: rgb(255, 255, 255);
+}
+
+/* Input styling */
+.chat-container form input {
+    /* flex-grow: 1; */
+    width: 500px;
     padding: 8px;
-    
-    width: calc(100% - 20px);
     background-color: rgb(230, 228, 226);
     border: none;
     border-radius: 10px;
+    
 }
+
 .chat-container form input:focus{
     outline: none;
 }
@@ -36,8 +66,25 @@
 
 }
 
+
+
 .chat-container .text-bubble {
-    background-color: aqua;
-    display: inherit;
-    
+    background-color: rgb(53, 247, 111);
+    padding: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
+    /* Adjust spacing between text bubbles */
+    align-self: flex-end;
+
+    border-radius: 10px;
+    max-width: 70%;
+
+    word-wrap: break-word;
+    animation: fadeIn;
+    animation-duration: 0.5s;
+    animation-timing-function: ease;
+
+}
+.chat-container .text-bubble p{
+    font-size:medium
 }

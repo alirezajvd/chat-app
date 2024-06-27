@@ -1,9 +1,9 @@
 const app = require('./middleware');
 const routes = require('./routes');
-const {createUserTable} = require('./db');
+const {createUserTable, createMessageTable} = require('./db');
 
 createUserTable();
-
+createMessageTable();
 const port = process.env.PORT || 5000;
 
 app.use('/', routes);
