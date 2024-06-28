@@ -53,13 +53,13 @@ router.post('/signup', (req, res) => {
     });
 });
 
-//user chat stores in db.messages
+//messages stores in db.messages
 router.post('/home/:userId/messages', (req,res) => {
-    const {message, userId} = req.body;
-    console.log('message received messages', message, 'UserID:', userId );
+    const {message, userId, recipientId} = req.body;
+    console.log('message received messages', message, 'UserID:', userId, 'RecipientId', recipientId );
 
 
-    db.run(`INSERT INTO messages (user_id, content) VALUES (?, ?)`, [userId, message], function (err){
+    db.run(`INSERT INTO messages (user_id, recipient_id, content) VALUES (?, ?, ?)`, [userId, recipientId, message], function (err){
         if(err){
             console.error('Database Error', err.message, this.lastID);
             res.status(500).json({message: 'Server Error'});
@@ -75,12 +75,12 @@ router.get('/home/:userId/messages', (req,res) =>{
     const {userId} = req.params;
     console.log('loading messages...', 'UserID:', userId);
 
-    db.all(`SELECT id, content FROM messages WHERE user_id = ? ORDER BY TIMESTAMP ASC`, [userId], (err, rows) =>{
+    db.all(`SELECT id, content, recipient_id FROM messages WHERE user_id = ? OR recipient_id = ?ORDER BY TIMESTAMP ASC`, [userId,userId], (err, rows) =>{
         if (err) {
             console.error('Database Error', err.message);
             res.status(500).json({message: 'Server Error'});
         }else{
-            const messages = rows.map(row => ({id: row.id, content: row.content }));
+            const messages = rows.map(row => ({ id: row.id, content: row.content, userId: row.user_id, recipientId: row.recipient_id }));
             res.status(200).json(messages);
         }
     }); 

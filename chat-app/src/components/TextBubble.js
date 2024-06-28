@@ -1,4 +1,4 @@
-import {useState, useEffect, useRef, useCallback} from "react";
+import {useState, useEffect, useRef} from "react";
 import './styles/textbubble.css'
 import { FaRegTrashAlt, FaEllipsisV } from "react-icons/fa";
 
@@ -11,30 +11,34 @@ const TextBubble = ({message, index, removeMessages}) =>{
 
 
     useEffect(() =>{
-        console.log('im is useEffect');
-
         const handleClickOutside = (e) =>{
             console.log('im in click outside');
             if (ellipsisRef.current && !ellipsisRef.current.contains(e.target)) {
                 setVisibleEllipsis(false)
             }
         };
+        if (visibleEllipsis) {
+            document.addEventListener("mousedown",  handleClickOutside);
+        }else{
+            console.log('remove');
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
 
-        document.addEventListener("click",  handleClickOutside);
         return () =>{
-            document.removeEventListener("click", handleClickOutside)
+            document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, []);
 
-    const handleToggleEllipsis = useCallback(() => {
-        setVisibleEllipsis(prevVisibleEllipsis => !prevVisibleEllipsis);
-        console.log("Visibility toggled:", !visibleEllipsis);
     }, [visibleEllipsis]);
+
+    const handleToggleEllipsis = (e) => {
+        e.stopPropagation();
+        setVisibleEllipsis(prevVisibleEllipsis => !prevVisibleEllipsis);
+    };
 
     
     const handleDeleteMessage = (e) =>{
         e.stopPropagation();
-        removeMessages(message.id, index)
+        removeMessages(message.id, index);
     }
     
 
@@ -42,7 +46,7 @@ const TextBubble = ({message, index, removeMessages}) =>{
         <div className="text-bubble-container" key={index}>
             {visibleEllipsis  && (               
                 <div className="ellipsis-container"  ref={ellipsisRef}>                
-                    <h3>{console.log('im here help')}
+                    <h3>
                         <FaRegTrashAlt
                             onClick={handleDeleteMessage}
                             className="delete-icon"
@@ -51,6 +55,7 @@ const TextBubble = ({message, index, removeMessages}) =>{
                 </div>
             )}
             <FaEllipsisV
+                onMouseDown= {(e) => e.stopPropagation()}
                 onClick={handleToggleEllipsis}
                 className="ellipsis-icon"
             />

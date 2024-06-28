@@ -37,6 +37,7 @@ const Chat = ({ className }) => {
                 })
                 const data = await response.json();
                 if (response.ok) {
+                    console.log(data);
                     setChatLogs(data);
                 }else{
                     console.log('didnt get the messages');
@@ -52,6 +53,7 @@ const Chat = ({ className }) => {
     //STORE MESSAGES// stores sends (userInput, userId) expects(data{id, successfull respones})
     const sendMessage = async (e) => {
         e.preventDefault();
+        const recipientId = 2;
 
         if (userInput !== '') {
             try {
@@ -61,7 +63,7 @@ const Chat = ({ className }) => {
                         'Content-Type': 'application/json',
                         'Authorization': `Bearer ${token}`
                     },
-                    body: JSON.stringify({message: userInput, userId})
+                    body: JSON.stringify({message: userInput, userId, recipientId})
                 });
                 const data = await response.json();
                 if (response.ok) {

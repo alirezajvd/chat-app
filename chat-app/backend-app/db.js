@@ -33,9 +33,11 @@ const createMessageTable = () =>{
     db.run(`CREATE TABLE IF NOT EXISTS messages(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         user_id INTEGER NOT NULL,
+        recipient_id INTEGER NOT NULL,
         content TEXT NOT NULL,
         timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (user_id) REFERENCES users (id)
+        FOREIGN KEY (recipient_id) REFERENCES users (id)
         )`, (err) => {
             if (err) {
                 console.error('Error creating messages table:', err.message)
@@ -44,6 +46,7 @@ const createMessageTable = () =>{
             }
         });
 }
+
 
 module.exports = {
     db,
