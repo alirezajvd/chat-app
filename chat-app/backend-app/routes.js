@@ -53,8 +53,8 @@ router.post('/signup', (req, res) => {
     });
 });
 
-//user chat stored in db
-router.post('/home', (req,res) => {
+//user chat stores in db.messages
+router.post('/home/:userId/messages', (req,res) => {
     const {message, userId} = req.body;
     console.log('message received messages', message, 'UserID:', userId );
 
@@ -68,6 +68,38 @@ router.post('/home', (req,res) => {
             res.status(201).json({message: 'Message stored successfully', id: this.lastID});
         }
     });
+});
+
+//displays previous chat 
+router.get('/home/:userId/messages', (req,res) =>{
+    const {userId} = req.params;
+    console.log('loading messages...', 'UserID:', userId);
+
+    db.all(`SELECT id, content FROM messages WHERE user_id = ? ORDER BY TIMESTAMP ASC`, [userId], (err, rows) =>{
+        if (err) {
+            console.error('Database Error', err.message);
+            res.status(500).json({message: 'Server Error'});
+        }else{
+            const messages = rows.map(row => ({id: row.id, content: row.content }));
+            res.status(200).json(messages);
+        }
+    }); 
+
+});
+
+//deletes the chat message 
+router.delete('/home/:userId/messages/:messageId', (req,res) =>{
+    const { userId, messageId } = req.params;
+    console.log('got delete request...', 'UserID:', userId, 'messageID:', messageId);
+    db.run(`DELETE FROM messages WHERE id = ? AND user_id = ?`, [messageId, userId], function(err) {
+        if (err) {
+            console.error('Database Error:', err.message);
+            res.status(500).json({message: 'Server Error'});
+        }else{
+            console.log(`Message deleted with ID ${messageId} for user ${userId}`);
+            res.status(200).json({ message: `Message with ID ${messageId} deleted successfully` });
+        }
+    })
 });
 
 module.exports = router;

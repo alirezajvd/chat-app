@@ -1,0 +1,50 @@
+.text-bubble-container {
+    display: inherit;
+    flex-direction: row;
+    align-self: flex-end;
+    word-wrap: break-word;
+    max-width: 80%;
+}
+
+.text-bubble-container .ellipsis-container {
+    display: flex;
+    flex-direction: row;
+    width: 200px;
+    background-color: #f397a4;
+}
+
+.text-bubble-container .ellipsis-container h3 {
+    background-color: #6d6d6d;
+    align-self: flex-end;
+}
+
+.text-bubble-container .ellipsis-icon {
+    color: #6d6d6d;
+    align-self: center;
+    border-radius: 0;
+}
+
+.delete-icon {
+    color: #fc4b63;
+
+}
+
+.text-bubble-container .text-bubble {
+    background-color: #8231df;
+    padding: 2px 25px 2px 25px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    /* Adjust spacing between text bubbles */
+    border-radius: 10px;
+
+
+    word-wrap: break-word;
+    animation: fadeIn;
+    animation-duration: 0.5s;
+    animation-timing-function: ease;
+
+}
+
+.text-bubble p {
+    font-size: medium
+}

@@ -1,6 +1,7 @@
 .sidebar{
-    background-color: rgb(219, 219, 219);
+    background-color: #bebebe;
     height: 100%;
-    width: 300px;
+    
+    min-width: 300px;
     overflow-y: auto;
 }
