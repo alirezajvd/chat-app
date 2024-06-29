@@ -5,7 +5,7 @@ import "./styles/chat.css"
 
 import TextBubble from "./TextBubble.js";
 
-const Chat = ({ className }) => {
+const Chat = ({ className, recipientId }) => {
     const [userInput, setUserInput] = useState('');
     const [chatLogs, setChatLogs] = useState([]);
     const {auth} = useAuth();
@@ -28,7 +28,7 @@ const Chat = ({ className }) => {
     useEffect(()=>{
         const fetchMessages = async () =>{
             try {
-                const response = await fetch(`http://localhost:5000/home/${userId}/messages`,{
+                const response = await fetch(`http://localhost:8000/home/${userId}/messages`,{
                     method: 'GET',
                     headers:{
                     'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ const Chat = ({ className }) => {
                 })
                 const data = await response.json();
                 if (response.ok) {
-                    console.log(data);
+                    console.log("data recieved from server:",data);
                     setChatLogs(data);
                 }else{
                     console.log('didnt get the messages');
@@ -53,11 +53,12 @@ const Chat = ({ className }) => {
     //STORE MESSAGES// stores sends (userInput, userId) expects(data{id, successfull respones})
     const sendMessage = async (e) => {
         e.preventDefault();
-        const recipientId = 2;
+        console.log(recipientId);
+        
 
         if (userInput !== '') {
             try {
-                const response = await fetch(`http://localhost:5000/home/${userId}/messages`,{
+                const response = await fetch(`http://localhost:8000/home/${userId}/messages`,{
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -82,7 +83,7 @@ const Chat = ({ className }) => {
     //removes message// sends (token, messageid) expects chatlogs
     const removeMessages = async (messageId, index) => {
         try {
-            const response = await fetch(`http://localhost:5000/home/${userId}/messages/${messageId}`, {
+            const response = await fetch(`http://localhost:8000/home/${userId}/messages/${messageId}`, {
                 method: 'DELETE',
                 headers:{
                     'Content-Type': 'application/json',
@@ -124,6 +125,7 @@ const Chat = ({ className }) => {
                 />
                 <button type="submit">send</button>
             </form>
+            <p>hello {recipientId}</p>
         </div>
     )
 }

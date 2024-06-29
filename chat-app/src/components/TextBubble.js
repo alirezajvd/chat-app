@@ -20,12 +20,12 @@ const TextBubble = ({message, index, removeMessages}) =>{
         if (visibleEllipsis) {
             document.addEventListener("mousedown",  handleClickOutside);
         }else{
-            console.log('remove');
             document.removeEventListener("mousedown", handleClickOutside);
         }
 
         return () =>{
             document.removeEventListener("mousedown", handleClickOutside);
+            
         };
 
     }, [visibleEllipsis]);
