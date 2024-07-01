@@ -19,11 +19,35 @@
     /* position: relative; */
     max-height: 100%;
     padding-bottom: 60px;
+    padding-top: 100px;
     /* Reserve space for the form */
     background-color: #EFE9F4;
 }
 
 /* Form styling */
+
+.chat-container .header-recipient{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: aliceblue;
+    position: absolute;
+    top: 0;
+    width: calc(100% - 320px);
+    padding-top: 20px;
+    padding: 20px 10px 20px 10px;
+}
+
+.chat-container .header-recipient img{
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+}
+.chat-container .header-recipient p {
+    font-size:larger;
+    margin-left: 10px;
+}
 .chat-container form {
     display: flex;
     align-self: center;

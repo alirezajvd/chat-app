@@ -1,23 +1,27 @@
 import {useState, useEffect, useRef} from "react";
-import './styles/textbubble.css'
+import './textbubble.css'
 import { FaRegTrashAlt, FaEllipsisV } from "react-icons/fa";
 
 
 
-const TextBubble = ({message, index, removeMessages}) =>{
+const TextBubble = ({className, message, index, removeMessages}) =>{
     
-    const [visibleEllipsis, setVisibleEllipsis] = useState(false);
+    const [visibleTrashIcon, setVisibleTrashIcon] = useState(false);
+    const [visibleEllipsis, setVisibleEllipsis] = useState(false)
+    const [showDelivered, setShowDelivered] = useState(false);
+    const [showSeen, setShowSeen] = useState(false);
     const ellipsisRef = useRef(null);
 
 
+    
     useEffect(() =>{
         const handleClickOutside = (e) =>{
             console.log('im in click outside');
             if (ellipsisRef.current && !ellipsisRef.current.contains(e.target)) {
-                setVisibleEllipsis(false)
+                setVisibleTrashIcon(false)
             }
         };
-        if (visibleEllipsis) {
+        if (visibleTrashIcon) {
             document.addEventListener("mousedown",  handleClickOutside);
         }else{
             document.removeEventListener("mousedown", handleClickOutside);
@@ -28,23 +32,31 @@ const TextBubble = ({message, index, removeMessages}) =>{
             
         };
 
-    }, [visibleEllipsis]);
+    }, [visibleTrashIcon]);
 
     const handleToggleEllipsis = (e) => {
         e.stopPropagation();
-        setVisibleEllipsis(prevVisibleEllipsis => !prevVisibleEllipsis);
+        setVisibleTrashIcon(prevVisibleTrashIcon => !prevVisibleTrashIcon);
     };
 
     
     const handleDeleteMessage = (e) =>{
         e.stopPropagation();
         removeMessages(message.id, index);
-    }
+    };
     
+    const toggleEllipsis = (e) =>{
+        e.stopPropagation();
+        setVisibleEllipsis(prevVisibleEllipsis => !prevVisibleEllipsis)
+    };
 
     return (
-        <div className="text-bubble-container" key={index}>
-            {visibleEllipsis  && (               
+        <div 
+            className={`text-bubble-container ${className}`} 
+            key={index}
+            onClick={toggleEllipsis}
+        >
+            {visibleTrashIcon  && (               
                 <div className="ellipsis-container"  ref={ellipsisRef}>                
                     <h3>
                         <FaRegTrashAlt
@@ -54,14 +66,17 @@ const TextBubble = ({message, index, removeMessages}) =>{
                     </h3>           
                 </div>
             )}
+            { visibleEllipsis && (
             <FaEllipsisV
                 onMouseDown= {(e) => e.stopPropagation()}
                 onClick={handleToggleEllipsis}
                 className="ellipsis-icon"
             />
+            )}
             <div className="text-bubble">
                  <p>{message.content}</p> 
             </div>
+            
         </div>
     );
 };

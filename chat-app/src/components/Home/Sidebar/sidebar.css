@@ -1,0 +1,34 @@
+.sidebar{
+    background-color: #bebebe;
+    height: 100%;
+    min-width: 300px;
+    overflow-y: auto;
+}
+
+.sidebar .profile-description{
+    background-color: aliceblue;
+    display: flex;
+    flex-direction: row;
+
+    align-items: stretch;
+}
+
+.sidebar .profile-description img{
+    align-self: center;
+    height: 70px;
+    width: 70px;
+}
+
+.sidebar .profile-description .profile-info{
+    margin-left: 5px;
+    font-weight: 300;
+}
+
+.sidebar .profile-description #edit-container{
+
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    padding-right: 10px;
+    margin-left: auto;
+}

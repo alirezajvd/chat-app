@@ -71,11 +71,18 @@ router.post('/home/:userId/messages', (req,res) => {
 });
 
 //displays previous chat 
-router.get('/home/:userId/messages', (req,res) =>{
-    const {userId} = req.params;
+router.get('/home/:userId/messages/:recipientId', (req,res) =>{
+    const { userId, recipientId } = req.params;
     console.log('loading messages...', 'UserID:', userId);
 
-    db.all(`SELECT id, content, recipient_id FROM messages WHERE user_id = ? OR recipient_id = ?ORDER BY TIMESTAMP ASC`, [userId,userId], (err, rows) =>{
+    db.all(`
+        SELECT id, content, recipient_id 
+        FROM messages 
+        WHERE (user_id = ? AND recipient_id = ?)
+            OR (user_id = ? AND recipient_id = ?)
+        ORDER BY TIMESTAMP ASC`,
+        [userId,recipientId, recipientId, userId],
+        (err, rows) =>{
         if (err) {
             console.error('Database Error', err.message);
             res.status(500).json({message: 'Server Error'});

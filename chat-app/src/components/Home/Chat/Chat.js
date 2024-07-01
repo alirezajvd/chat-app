@@ -1,21 +1,55 @@
 import { useEffect, useState, useRef } from "react";
-import { useAuth } from "../AuthContext";
-import "./styles/chat.css"
-
-
+import { useAuth } from "../../../AuthContext.js";
+import recipinetimg from "./7309681.jpg"
+import "./chat.css"
 import TextBubble from "./TextBubble.js";
 
 const Chat = ({ className, recipientId }) => {
     const [userInput, setUserInput] = useState('');
     const [chatLogs, setChatLogs] = useState([]);
+    // const [isTyping, setIsTyping] = useState(false)
     const {auth} = useAuth();
     const userId = auth.userId;
     const token = auth.token;
     const chatContainsRef = useRef(null);
+    const ws = useRef(null)
     
     const handleTyping = (e) => {
         setUserInput(e.target.value);
+        // ws.current.send(JSON.stringify({isTyping: true}))
     };
+
+    //websocket checking message update
+    useEffect(() =>{
+        
+
+        ws.current = new WebSocket('ws://localhost:8000');
+
+        ws.current.onopen = () => {
+            console.log('websocket connected');
+        };
+
+        ws.current.onmessage = (event) =>{
+            console.log('Received websocket: ', event.data);
+            const message = JSON.parse(event.data);
+            if (message.type === 'message') {
+                setChatLogs(prevChatLogs => [...prevChatLogs, message])
+            }
+
+        };
+
+        ws.current.onclose = () => {
+            console.log('Websocket disconnected');
+        };
+
+        ws.current.error = (error) => {
+            console.error('Websocket err', error);
+        };
+
+        return () =>{
+            ws.current.close();
+        };
+    },[recipientId]);
 
     //scrolls down when user puts a message in
     useEffect(() => {
@@ -25,36 +59,37 @@ const Chat = ({ className, recipientId }) => {
     }, [chatLogs])
 
     //GETS MESSAGES// sends (token) expects data{chatLogs{id, content}}
+
+
     useEffect(()=>{
-        const fetchMessages = async () =>{
+        const fetchMessages = async () => {
             try {
-                const response = await fetch(`http://localhost:8000/home/${userId}/messages`,{
+                const response = await fetch(`http://localhost:8000/home/${userId}/messages/${recipientId}`, {
                     method: 'GET',
-                    headers:{
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                    }
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
                 })
                 const data = await response.json();
                 if (response.ok) {
-                    console.log("data recieved from server:",data);
+                    console.log("data recieved from server:", data);
                     setChatLogs(data);
-                }else{
+                } else {
                     console.log('didnt get the messages');
-                }   
+                }
             } catch (error) {
                 console.log('server not reached');
             }
+        };
+        if (recipientId && token && userId) {
+            fetchMessages();
         }
-        fetchMessages();
-    },[userId,token]);
+    },[userId, token, recipientId]);
 
-
-    //STORE MESSAGES// stores sends (userInput, userId) expects(data{id, successfull respones})
+    //SEND MESSAGES// sends (userInput, userId) expects(data{id, successfull respones})
     const sendMessage = async (e) => {
         e.preventDefault();
-        console.log(recipientId);
-        
 
         if (userInput !== '') {
             try {
@@ -68,7 +103,15 @@ const Chat = ({ className, recipientId }) => {
                 });
                 const data = await response.json();
                 if (response.ok) {
-                    setChatLogs([...chatLogs, {id: data.id, content:userInput}])
+                    const newMessage = {
+                        id: data.id, 
+                        content: userInput, 
+                        recipientId: parseInt(recipientId),
+                        userId: parseInt(userId),
+                        type: 'message'    
+                        };
+                    setChatLogs([...chatLogs, {id: data.id, content:userInput}]);
+                    ws.current.send(JSON.stringify(newMessage));
                     setUserInput('');
                 }else{
                     console.log('Invalid chat text somehow');
@@ -107,15 +150,21 @@ const Chat = ({ className, recipientId }) => {
 
     return (
         <div className="chat-container" ref={chatContainsRef}>
+
+            <div className="header-recipient">
+                <img src={recipinetimg} alt="user"/>
+                <p>user1</p>
+            </div>
             {chatLogs.map((message, index) => (
                 <TextBubble
+                    className={parseInt(userId) === message.recipientId ? "text-bubble-recipient": "text-bubble-user"}
                     key={message.id}
                     message = {message}
                     index={index}
                     removeMessages={removeMessages}
                 />
-            ))}
 
+            ))}
             <form onSubmit={sendMessage}>
                 <input
                     type="text"

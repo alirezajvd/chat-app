@@ -1,0 +1,58 @@
+.text-bubble-user{
+    color: palegoldenrod;
+    align-self: flex-end;
+}
+.text-bubble-recipient{
+    color: aqua;
+    align-self: flex-start;
+}
+
+.text-bubble-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin: 15px 20px 20px 0px;
+    min-height: 50px;
+    word-wrap: break-word;
+    max-width: 80%;
+}
+
+.text-bubble-container .text-bubble {
+    background-color: #8231df;
+    padding: 2px 25px 2px 25px;
+    border-radius: 10px;
+    word-wrap: break-word;
+    animation: fadeIn;
+    animation-duration: 0.5s;
+    animation-timing-function: ease;
+
+}
+
+.text-bubble p {
+    font-size: medium
+}
+
+.text-bubble-container .ellipsis-container {
+
+}
+
+.text-bubble-container .ellipsis-container h3 {
+    display: flex;
+    align-items: center;
+    background-color: #a7a6a6;
+    height: 20px;
+    border-radius: 8px;
+
+}
+
+.text-bubble-container .ellipsis-icon {
+    color: #6d6d6d;
+    align-self: center;
+    border-radius: 0;
+}
+
+.delete-icon {
+    color: #fc4b63;
+
+}
