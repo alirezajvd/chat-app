@@ -2,7 +2,6 @@ const express = require('express');
 const {db} = require('./db')
 const router = express.Router()
 const jwt = require('jsonwebtoken')
-
 //CHANGE THIS LATER 
 const accessTokenSecret = '!super@strong#password$123456%';
 
@@ -70,7 +69,7 @@ router.post('/home/:userId/messages', (req,res) => {
     });
 });
 
-//displays previous chat 
+//send previous chat 
 router.get('/home/:userId/messages/:recipientId', (req,res) =>{
     const { userId, recipientId } = req.params;
     console.log('loading messages...', 'UserID:', userId);
@@ -94,7 +93,7 @@ router.get('/home/:userId/messages/:recipientId', (req,res) =>{
 
 });
 
-//deletes the chat message 
+//deletes requested chat message 
 router.delete('/home/:userId/messages/:messageId', (req,res) =>{
     const { userId, messageId } = req.params;
     console.log('got delete request...', 'UserID:', userId, 'messageID:', messageId);
@@ -107,6 +106,43 @@ router.delete('/home/:userId/messages/:messageId', (req,res) =>{
             res.status(200).json({ message: `Message with ID ${messageId} deleted successfully` });
         }
     })
+});
+
+//gets recipient id, name and list of recipient not empty messages and last message, timestamp
+router.get('/home/:userId/communication-log', (req, res) => {
+    const userId = req.params.userId;
+    console.log('Got initial communication log request...');
+
+    const query = `
+        SELECT m.recipient_id, u.username AS recipient_username, m.content AS last_message, m.timestamp AS last_message_timestamp
+        FROM messages m
+        JOIN users u ON m.recipient_id = u.id
+        WHERE m.id IN (
+            SELECT MAX(id)
+            FROM messages
+            WHERE user_id = ?
+            GROUP BY recipient_id
+        )
+        ORDER BY m.timestamp DESC
+    `;
+
+    db.all(query, [userId], (err, rows) => {
+        if (err) {
+            console.error('Error fetching communication log:', err);
+            res.status(500).json({ error: 'Internal Server Error' });
+        } else {
+            // Send data to HTTP client
+            
+
+            // Emit data to WebSocket clients
+            // const logs = {
+            //     type: 'recipient',
+            //     data: rows
+            // };
+            console.log('processed-----------------------------------------');
+            res.status(200).json(rows);
+        }
+    });
 });
 
 module.exports = router;

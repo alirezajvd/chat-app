@@ -3,7 +3,7 @@ import "./sidebar.css"
 import { FaEdit, FaSearch, FaPlus} from "react-icons/fa";
 import DisplayUsers from "./DisplayUsers";
 
-const Sidebar = ({ className, liftUpRecipient }) => {
+const Sidebar = ({ className, liftUpRecipient, communicationLog }) => {
     const [selectedRecipient, setSelectedRecipient] = useState(2);
     const [recipientList, setRecipientList] = useState([2, 3]);
 
@@ -18,7 +18,7 @@ const Sidebar = ({ className, liftUpRecipient }) => {
         setSelectedRecipient(user);
         liftUpRecipient(selectedRecipient);
     };
-
+    //placeholder to select users
     const handleGo = (e) => {
         e.preventDefault();
         if (selectedRecipient) {
@@ -48,7 +48,7 @@ const Sidebar = ({ className, liftUpRecipient }) => {
                 <FaSearch />
                 <FaPlus />
             </div>
-
+            {console.log('im in sidebar comLogs::::::::', communicationLog)}
             <form>
                 <label htmlFor="chooseuser">choose user to message</label>
                 <input 
@@ -62,7 +62,6 @@ const Sidebar = ({ className, liftUpRecipient }) => {
                 <p>{selectedRecipient}</p>
                 <button type="submit" onClick={handleGo}>go</button>
             </form>
-            {console.log(selectedRecipient)}
             <DisplayUsers 
                 recipientList = {recipientList}
                 selectedRecipient = {selectedRecipient}

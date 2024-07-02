@@ -26,7 +26,7 @@ const Chat = ({ className, recipientId }) => {
         ws.current = new WebSocket('ws://localhost:8000');
 
         ws.current.onopen = () => {
-            console.log('websocket connected');
+            // console.log('websocket connected');
         };
 
         ws.current.onmessage = (event) =>{
@@ -39,7 +39,7 @@ const Chat = ({ className, recipientId }) => {
         };
 
         ws.current.onclose = () => {
-            console.log('Websocket disconnected');
+            // console.log('Websocket disconnected');
         };
 
         ws.current.error = (error) => {
