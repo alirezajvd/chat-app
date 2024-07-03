@@ -5,7 +5,12 @@ import DisplayUsers from "./DisplayUsers";
 
 const Sidebar = ({ className, liftUpRecipient, communicationLog }) => {
     const [selectedRecipient, setSelectedRecipient] = useState(2);
-    const [recipientList, setRecipientList] = useState([2, 3]);
+    const [recipientList, setRecipientList] = useState([]);
+
+    useEffect(() =>{
+        console.log('im here');
+        setRecipientList(communicationLog);
+    },[communicationLog])
 
     const handleUser = (e) =>{
         setSelectedRecipient(e.target.value)
@@ -48,7 +53,7 @@ const Sidebar = ({ className, liftUpRecipient, communicationLog }) => {
                 <FaSearch />
                 <FaPlus />
             </div>
-            {console.log('im in sidebar comLogs::::::::', communicationLog)}
+            {console.log('im in sidebar comLogs::::::::', recipientList)}
             <form>
                 <label htmlFor="chooseuser">choose user to message</label>
                 <input 

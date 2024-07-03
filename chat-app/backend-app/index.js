@@ -12,7 +12,55 @@ const port = process.env.PORT || 8000;
 const server = http.createServer(app);
 
 const wss = new WebSocket.Server({server});
+//----------------------
+////////////Have to change the wesbsocket so that it only sends the messages between user and recipient////////
+//-----------------------
+// const userSocketMap = new Map();
 
+// wss.on('connection', (ws) => {
+//     console.log('WebSocket client connected');
+
+//     ws.on('message', (message) => {
+//         console.log(`WebSocket Received message: ${message}`);
+
+//         try {
+//             const parsedMessage = JSON.parse(message);
+//             const userId = parsedMessage.userId;
+//             const recipientId = parsedMessage.recipientId;
+
+//             userSocketMap.set(userId, ws)
+
+//             const recipientSocket = userSocketMap.get(recipientId);
+//             const senderSocket = userSocketMap.get(userId);
+//             //console.log(recipientSocket);
+//             //console.log(senderSocket);
+//             console.log(senderSocket === true, senderSocket !== ws);
+
+//             if (recipientSocket && recipientSocket !== ws && recipientSocket.readyState === WebSocket.OPEN) {
+//                 recipientSocket.send(JSON.stringify(parsedMessage));
+//                 console.log('im in sender');
+//             }
+
+//             if (senderSocket && senderSocket !== ws && senderSocket.readyState === WebSocket.OPEN) {
+//                 senderSocket.send(JSON.stringify(parsedMessage));
+//                 console.log('im in user');
+//             }
+
+//         } catch (error) {
+//             console.error('Error parsing message:', error);
+//         }
+//     });
+
+//     ws.on('close', () => {
+//         console.log('WebSocket client disconnected');
+
+//         userSocketMap.forEach((socket, key) => {
+//             if (socket === ws) {
+//                 userSocketMap.delete(key);
+//             }
+//         });
+//     });
+// });
 
 wss.on('connection', (ws) => {
     console.log('WebSocket client connected');
@@ -24,12 +72,14 @@ wss.on('connection', (ws) => {
 
         try {
             const parsedMessage = JSON.parse(message);
-                wss.clients.forEach((client) => {
-                    if (client !== ws && client.readyState === WebSocket.OPEN) {
-                        client.send(JSON.stringify(parsedMessage));
-                    }
-                });
-            
+
+
+            wss.clients.forEach((client) => {
+                if (client !== ws && client.readyState === WebSocket.OPEN) {
+                    client.send(JSON.stringify(parsedMessage));
+                }
+            });
+        
         } catch (error) {
             console.error('Error parsing message:', error);
         }

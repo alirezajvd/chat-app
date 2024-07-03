@@ -8,7 +8,7 @@ import { useAuth } from "../AuthContext"
     // last_message *from a previous user* 
     // last_message_timestamp, 
     // recipient_id, 
-    // recipient_username: 
+    // recipient_username 
 //all this is used to show info in sidebar 
 const Home = () => {
     const [shareRecipient, setShareRecipient] = useState('');
@@ -18,7 +18,8 @@ const Home = () => {
     const ws =useRef(null)
 
     //UPDATE USER HISTORY// updates communication log with ws 
-
+    //*this websocket is anchored to the other one in chat.js which means this only triggers
+    //when a message is sent 
     useEffect(() => {
         ws.current = new WebSocket("ws://localhost:8000");
 
@@ -33,13 +34,9 @@ const Home = () => {
 
             //trigger when a message is sent to *this user* REFER TO chat.js ws for more info
             if (message.type === 'message') {
+                
                 fetchCommunicationLog();
             }    
-
-            if (message.type === 'recipient') {
-                console.log('received web',message);
-                setCommunicationLog(message.data);
-            };
         };
 
         ws.current.onclose = () => {
@@ -70,7 +67,6 @@ const Home = () => {
             if (response.ok) {
                 
                 console.log('communication log::::::::::', data);
-                
                 setCommunicationLog(data);
                 //ws.current.send(JSON.stringify({ type: 'recipient', data }));
                 

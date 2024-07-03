@@ -114,32 +114,35 @@ router.get('/home/:userId/communication-log', (req, res) => {
     console.log('Got initial communication log request...');
 
     const query = `
-        SELECT m.recipient_id, u.username AS recipient_username, m.content AS last_message, m.timestamp AS last_message_timestamp
-        FROM messages m
-        JOIN users u ON m.recipient_id = u.id
-        WHERE m.id IN (
-            SELECT MAX(id)
+        SELECT 
+            ? AS user_id,
+            partner_id,
+            u.username AS partner_username,
+            m.content AS last_message,
+            m.timestamp AS last_message_timestamp
+        FROM (
+            SELECT 
+                CASE 
+                    WHEN user_id = ? THEN recipient_id
+                    ELSE user_id
+                END AS partner_id,
+                MAX(id) AS last_message_id
             FROM messages
-            WHERE user_id = ?
-            GROUP BY recipient_id
-        )
+            WHERE (user_id = ? OR recipient_id = ?)
+              AND user_id != recipient_id
+            GROUP BY partner_id
+        ) latest_messages
+        JOIN messages m ON m.id = latest_messages.last_message_id
+        JOIN users u ON latest_messages.partner_id = u.id
         ORDER BY m.timestamp DESC
     `;
 
-    db.all(query, [userId], (err, rows) => {
+    db.all(query, [userId, userId, userId, userId], (err, rows) => {
         if (err) {
             console.error('Error fetching communication log:', err);
             res.status(500).json({ error: 'Internal Server Error' });
         } else {
-            // Send data to HTTP client
-            
-
-            // Emit data to WebSocket clients
-            // const logs = {
-            //     type: 'recipient',
-            //     data: rows
-            // };
-            console.log('processed-----------------------------------------');
+            console.log('Processed communication log request successfully');
             res.status(200).json(rows);
         }
     });
