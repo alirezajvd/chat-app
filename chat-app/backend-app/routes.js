@@ -135,6 +135,7 @@ router.get('/home/:userId/communication-log', (req, res) => {
         JOIN messages m ON m.id = latest_messages.last_message_id
         JOIN users u ON latest_messages.partner_id = u.id
         ORDER BY m.timestamp DESC
+        
     `;
 
     db.all(query, [userId, userId, userId, userId], (err, rows) => {

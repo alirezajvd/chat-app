@@ -13,7 +13,7 @@ const server = http.createServer(app);
 
 const wss = new WebSocket.Server({server});
 //----------------------
-////////////Have to change the wesbsocket so that it only sends the messages between user and recipient////////
+////////////IMPORTANT:::::Have to change the wesbsocket so that it only sends the messages between user and recipient////////
 //-----------------------
 // const userSocketMap = new Map();
 

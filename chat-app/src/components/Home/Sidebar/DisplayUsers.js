@@ -1,3 +1,5 @@
+import moment from 'moment';
+import 'moment-timezone';
 import { FaCheck } from "react-icons/fa"
 import "./displayUsers.css"
 
@@ -6,6 +8,30 @@ const DisplayUsers = ({recipientList, selectedRecipient, handleSelectedUserChang
         // console.log(id);
         handleSelectedUserChange(id);
     }
+
+
+    const formatTime = (timestamp) => {
+        if (!timestamp) return ''; 
+
+        const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+        const momentDate = moment.utc(timestamp).tz(userTimezone);
+        const storeHours = momentDate.format('HH:mm');
+        
+        // Get current moment in Pacific Time
+        const now = moment().tz(userTimezone);
+
+        // Calculate difference in days using local time
+        const diffDays = now.startOf('day').diff(momentDate.startOf('day'), 'days');
+
+        if (diffDays === 0) {
+            return storeHours; //eg. 22:06
+        } else if (diffDays === 1) {
+            return 'Yesterday';
+        } else {
+            return momentDate.format('DD MMM'); // Example: 03 Jul
+        }
+    };
 
 
     return(
@@ -22,7 +48,7 @@ const DisplayUsers = ({recipientList, selectedRecipient, handleSelectedUserChang
                         <p>{obj.last_message}</p>
                     </div>
                     <div className="extra-container">
-                        <p>12:24</p>
+                        <p>{formatTime(obj.last_message_timestamp)} </p>
                         <FaCheck />
                     </div>
 
