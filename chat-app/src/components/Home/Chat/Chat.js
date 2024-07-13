@@ -162,6 +162,7 @@ const Chat = ({ className, recipientId }) => {
                     message = {message}
                     index={index}
                     removeMessages={removeMessages}
+                    // previousMessageTimestamp={index > 0 ? message[index - 1].timeStamp : null}
                 />
 
             ))}

@@ -5,7 +5,7 @@ import "./styles/home.css"
 import { useAuth } from "../AuthContext"
 
 //remember: communication log is an array of objects that has properties :
-    // last_message *from a previous user* 
+    // last_message (from a previous user) 
     // last_message_timestamp, 
     // recipient_id, 
     // recipient_username 

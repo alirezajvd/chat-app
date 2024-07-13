@@ -1,7 +1,8 @@
  import { useEffect, useState } from "react";
 import "./sidebar.css"
-import { FaEdit, FaSearch, FaPlus} from "react-icons/fa";
+import { FaEdit} from "react-icons/fa";
 import DisplayUsers from "./DisplayUsers";
+import SearchUser from "./SearchUser";
 
 const Sidebar = ({ className, liftUpRecipient, communicationLog }) => {
     const [selectedRecipient, setSelectedRecipient] = useState(2);
@@ -32,6 +33,13 @@ const Sidebar = ({ className, liftUpRecipient, communicationLog }) => {
             setSelectedRecipient('');
         }
     }
+
+    const handleDisplaySearchedUser = (id) =>{
+        console.log('im sidebar fuunct',id);
+        liftUpRecipient(id);
+        setSelectedRecipient('');
+
+    }
     return (
         <div className="sidebar">
             <div className="profile-description">
@@ -45,14 +53,7 @@ const Sidebar = ({ className, liftUpRecipient, communicationLog }) => {
                 </div>
                 
             </div>
-            <div>
-                <input
-                    type="text"
-                    placeholder="search here.."
-                />
-                <FaSearch />
-                <FaPlus />
-            </div>
+            <SearchUser handleLiftSearch = {handleDisplaySearchedUser}/>
             {console.log('im in sidebar comLogs::::::::', recipientList)}
             <form>
                 <label htmlFor="chooseuser">choose user to message</label>

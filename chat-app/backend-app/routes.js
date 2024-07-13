@@ -75,7 +75,7 @@ router.get('/home/:userId/messages/:recipientId', (req,res) =>{
     console.log('loading messages...', 'UserID:', userId);
 
     db.all(`
-        SELECT id, content, recipient_id 
+        SELECT id, content, recipient_id, timestamp
         FROM messages 
         WHERE (user_id = ? AND recipient_id = ?)
             OR (user_id = ? AND recipient_id = ?)
@@ -86,7 +86,8 @@ router.get('/home/:userId/messages/:recipientId', (req,res) =>{
             console.error('Database Error', err.message);
             res.status(500).json({message: 'Server Error'});
         }else{
-            const messages = rows.map(row => ({ id: row.id, content: row.content, userId: row.user_id, recipientId: row.recipient_id }));
+            const messages = rows.map(row => ({ id: row.id, content: row.content, userId: row.user_id, recipientId: row.recipient_id, timeStamp: row.timestamp}));
+            console.log(messages);
             res.status(200).json(messages);
         }
     }); 
@@ -148,5 +149,29 @@ router.get('/home/:userId/communication-log', (req, res) => {
         }
     });
 });
+
+
+router.get('/home/search-user', (req, res) =>{
+    const searchQuery = req.query.username;
+    console.log('///////////////////////');
+    
+    console.log('SEARCH QUERY:::',searchQuery);
+
+    db.get(`SELECT id, username FROM users WHERE username = ? `, [searchQuery], (err, user) =>{
+        if (err){
+            console.error('Error fetching communication log:', err);
+            res.status(500).json({ error: 'Internal Server Error' });
+        } 
+        if(user){
+            console.log('sent ittttttttttt');
+            res.status(200).json(user);
+        }
+        else {
+            console.log('got the username');
+            res.status(404).json({error: 'User not found'});
+        }
+    })
+
+})
 
 module.exports = router;
